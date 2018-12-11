@@ -53,7 +53,7 @@ def get_all_links(content, page):
 def valid_filename(s):
     import string
     valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    s = ''.join(c for c in s if c in valid_chars)
+    s = ''.join(c for c in s if c in valid_chars)[:100]
     return s
 def add_page_to_folder(page, content):  # 将网页存到文件夹里，将网址和对应的文件名写入index.txt中
     index_filename = 'index.txt'  # index.txt中每行是'网址 对应的文件名'
@@ -100,12 +100,12 @@ count = 0
 
 start = time.clock()
 graph = {}
-q.put('https://www.zhihu.com/')
+q.put('https://www.douban.com/')
 for i in range(NUM):
     t = threading.Thread(target=working)
     t.setDaemon(True)
     t.start()
-while count<30000:
+while count<200000:
     pass
 end = time.clock()
 print(end-start)
