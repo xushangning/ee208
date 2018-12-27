@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
 import os
 
 import time
@@ -190,10 +191,6 @@ def save_result(img, rst):
     return rst
 
 
-
-checkpoint_path = './east_icdar2015_resnet_v1_50_rbox'
-
-
 @app.route('/', methods=['POST'])
 def index_post():
     global predictor
@@ -223,6 +220,30 @@ def main():
     app.debug = args.debug
     app.run('0.0.0.0', args.port)
 
-if __name__ == '__main__':
-    main()
 
+def extract_rot(img, save_path):
+    params = get_predictor(checkpoint_path)(img)
+    cv2.imwrite(os.path.join(save_path, rot_filename),
+                draw_illu(img.copy(), params))
+    return params
+
+
+if __name__ == '__main__':
+    checkpoint_path = './east_icdar2015_resnet_v1_50_rbox'
+    dataset_path = 'dataset'
+    result_path = 'results'
+    rot_filename = 'rot.png'
+
+    if not os.path.exists(result_path):
+        os.mkdir(result_path)
+    dataset_dir = Path(dataset_path)
+    for f in dataset_dir.iterdir():
+        print(f.name)
+        movie_title = f.name.rstrip('.jpg')
+        img = cv2.imread(str(f))
+        result_save_path = os.path.join(result_path, movie_title)
+        if not os.path.exists(result_save_path):
+            os.mkdir(result_save_path)
+        extract_rot(img, result_save_path)
+
+    # main()
