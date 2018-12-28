@@ -1,10 +1,10 @@
 <template>
 	<div>
 	    <el-carousel type="card" trigger="click" height="400px">
-	      <el-carousel-item 
-	      v-for="item in items" 
-	      :key="item.id">
-	        <h3>{{ item.file }}</h3>
+	      <el-carousel-item
+	      v-for="movie in movies" 
+	      :key="movie.id">
+	        <img :src="movie.img">
 	      </el-carousel-item>
 	    </el-carousel>
 	</div>
@@ -13,13 +13,10 @@
 <script>
 	export default {
 		name:"Carousel",
-		data (){
-			return {
-				items:[
-				{id:0,file:'海王'},
-				{id:1,file:'蜘蛛侠'},
-				{id:2,file:'蝙蝠侠'}
-				]
+		props: {
+			movies:{
+				type: Array,
+				required: true
 			}
 		}
 	}
@@ -27,18 +24,20 @@
 
 <style>
 	.el-carousel__item h3 {
-	    color: #475669;
+	    color: rgba(0,0,0,0);
 	    font-size: 14px;
-	    opacity: 0.75;
+	    opacity: 0;
 	    line-height: 150px;
 	    margin: 0;
 	}
-
-	.el-carousel__item:nth-child(2n) {
-	    background-color: #99a9bf;
-	}
-	  
-	.el-carousel__item:nth-child(2n+1) {
-	    background-color: #d3dce6;
-	}
+  .el-carousel__item:nth-child(2n) {
+    color: rgba(0,0,0,0);
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+    color: rgba(0,0,0,0);
+  }
+  .el-carousel__mask, .el-cascader-menu, .el-cascader-menu__item.is-disabled:hover, .el-collapse-item__header, .el-collapse-item__wrap {
+  	background-color: rgba(0,0,0,0);
+  }
 </style>

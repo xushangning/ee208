@@ -1,21 +1,19 @@
 <template>
-	<div id="whole">
+	<div id="whole" :style="bg">
 	    <el-container>
-	      <el-header height='61px'>
+	      <el-header height="61px">
 	        <el-row>
-	          <el-col :span="1">
-	          	<a href="#"><img :src="imgurl" id="logo"></a>
+	          <el-col :span="24">
+	          	<vmenu :activeIndex="index" :items="items"></vmenu>
 	          </el-col>
-	          <el-col :span="22" :offset="1">
-	          	<vmenu></vmenu>
-	          </el-col>
-	          <el-col :span="2" :offset="20" id="time1"><time1></time1></el-col>
+	          <el-col :span="1" :offset="22" id="info1"><info1></info1></el-col>
+	          <el-col :span="1" :offset="23" id="time1"><time1></time1></el-col>
 	        </el-row>
 	      </el-header>
 	      <el-main>
 	      	<el-row>
-	      		<el-col>
-	          		<vform></vform>
+	      		<el-col :span="11">
+	          		<vform :tp='tp'></vform>
 	          	</el-col>
 	          </el-row>
 	        <el-row>
@@ -24,7 +22,7 @@
 	        </el-row>
 	        <el-row>
 	        	<el-col :span="20" :offset="2">
-	        		<carousel></carousel>
+	        		<carousel :movies="movies"></carousel>
 	        	</el-col>
 	        </el-row>
 	      </el-main>
@@ -33,26 +31,53 @@
 </template>
 
 <script>
-	import VMenu from './vmenu.vue';
-	import Time1 from './time1.vue';
-	import VForm from './form.vue'; 
-	import Carousel from './carousel.vue';
+	import VMenu from "./vmenu.vue";
+	import Time1 from "./time1.vue";
+	import VForm from "./form.vue"; 
+	import Carousel from "./carousel.vue";
+	import Info1 from "./info1.vue";
 	export default {
-		data () {
-			return{
-				imgurl:require('../assets/logo.png'),
-			}
-		},
 		components:{
-			'vmenu': VMenu,
-			'time1': Time1,
-			'vform': VForm,
-			'carousel': Carousel
+			"vmenu": VMenu,
+			"time1": Time1,
+			"vform": VForm,
+			"carousel": Carousel,
+			"info1": Info1,
+		},
+		data() {
+			return {
+				index: "/",
+				items: [
+					{id: 1,index: "/",name: "首页"},
+					{id: 2,index: "/hello",name: "电影大全"}
+				],
+				movies: [
+					{id: 1,name:"蜘蛛侠3",img:"../../static/蜘蛛侠3.jpg"},
+					{id: 2,name:"钢铁侠3",img:"../../static/钢铁侠3.jpg"},
+					{id: 3,name:"X战警3：背水一战",img:"../../static/X战警3：背水一战.jpg"},
+					{id: 4,name:"海王",img:"../../static/海王.jpg"},
+					{id: 5,name:"蝙蝠侠大战超人：正义黎明",img:"../../static/蝙蝠侠大战超人：正义黎明.jpg"},
+				],
+				bg: {
+					width: '100%',
+    				height: '100%',
+					backgroundImage: "url("+require("../assets/bg.gif")+")",
+					backgroundSize: '100% 100%',
+					overflow: 'hidden'
+				},
+				tp: 'info'
+			}
 		}
 	}
 </script>
 
 <style>
+	html,body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+	}
+	a{text-decoration : none}
 	.whole {
 	    width:100%;
 	    height: 100%;
@@ -60,7 +85,7 @@
 	    position: absolute;
 	}
 	.el-header, .el-footer {
-	    background-color: #ffffff;
+	    background-color: rgba(0,0,0,0);
 	    color: #333;
 	    text-align: center;
 	    line-height: 60px;
@@ -106,11 +131,8 @@
 		position:absolute;
 		top:0px;
 	}
-	#logo {
-		position:absolute;
-		top:6px;
-		left: 0px;
-		height:50px;
-		width:50px;
+	#info1 {
+		position: absolute;
+		top: 0px;
 	}
 </style>

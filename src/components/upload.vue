@@ -11,10 +11,7 @@
 				<i class="el-icon-upload"></i>
 				<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
 			</el-upload>
-		  <el-button 
-		  type="primary"
-		  slot="reference" 
-		  icon="el-icon-picture"></el-button>
+		  	<i slot="reference" class="el-icon-picture"></i>
 		</el-popover>
 	</div>
 </template>
