@@ -3,7 +3,7 @@
 		<div>
 			<el-popover
 			    trigger="hover">
-			    <p  id="timeShow" class="time1"></p>
+			    <p id="timeShow" class="time1"></p>
 			    <i slot="reference" class="el-icon-time" ></i>
 			</el-popover>
 		</div>
@@ -37,9 +37,9 @@
 .time1{
     width:100%; 
     text-align:center;
-    color: #333;
+    color: hsla(220, 3%, 85%, 1);
 }
 .el-icon-time{
-	color:#fff;
+	color:#ccc;
 }
 </style>

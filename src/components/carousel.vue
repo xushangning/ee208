@@ -37,7 +37,7 @@
   .el-carousel__item:nth-child(2n+1) {
     color: rgba(0,0,0,0);
   }
-  .el-carousel__mask, .el-cascader-menu, .el-cascader-menu__item.is-disabled:hover, .el-collapse-item__header, .el-collapse-item__wrap {
+  .el-carousel__mask {
   	background-color: rgba(0,0,0,0);
   }
 </style>

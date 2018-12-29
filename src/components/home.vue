@@ -2,13 +2,11 @@
 	<div id="whole" :style="bg">
 	    <el-container>
 	      <el-header height="61px">
-	        <el-row>
-	          <el-col :span="24">
-	          	<vmenu :activeIndex="index" :items="items"></vmenu>
-	          </el-col>
-	          <el-col :span="1" :offset="22" id="info1"><info1></info1></el-col>
-	          <el-col :span="1" :offset="23" id="time1"><time1></time1></el-col>
-	        </el-row>
+	        <el-col :span="24">
+	        	<vmenu :activeIndex="index" :items="items"></vmenu>
+	        </el-col>
+	        <el-col :span="1" id="info1"><info1></info1></el-col>
+	        <el-col :span="1" id="time1"><time1></time1></el-col>
 	      </el-header>
 	      <el-main>
 	      	<el-row>
@@ -52,11 +50,11 @@
 					{id: 2,index: "/hello",name: "电影大全"}
 				],
 				movies: [
-					{id: 1,name:"蜘蛛侠3",img:"../../static/蜘蛛侠3.jpg"},
-					{id: 2,name:"钢铁侠3",img:"../../static/钢铁侠3.jpg"},
-					{id: 3,name:"X战警3：背水一战",img:"../../static/X战警3：背水一战.jpg"},
-					{id: 4,name:"海王",img:"../../static/海王.jpg"},
-					{id: 5,name:"蝙蝠侠大战超人：正义黎明",img:"../../static/蝙蝠侠大战超人：正义黎明.jpg"},
+					{id: 1,name:"蜘蛛侠3",img:"../../static/image/蜘蛛侠3.jpg"},
+					{id: 2,name:"钢铁侠3",img:"../../static/image/钢铁侠3.jpg"},
+					{id: 3,name:"X战警3：背水一战",img:"../../static/image/X战警3：背水一战.jpg"},
+					{id: 4,name:"海王",img:"../../static/image/海王.jpg"},
+					{id: 5,name:"蝙蝠侠大战超人：正义黎明",img:"../../static/image/蝙蝠侠大战超人：正义黎明.jpg"},
 				],
 				bg: {
 					width: '100%',
@@ -65,7 +63,10 @@
 					backgroundSize: '100% 100%',
 					overflow: 'hidden'
 				},
-				tp: 'info'
+				tp: {
+					typ: 'info',
+					imgurl: require("../assets/button.png")
+				}
 			}
 		}
 	}
@@ -74,15 +75,15 @@
 <style>
 	html,body {
     height: 100%;
-    overflow: hidden;
     margin: 0;
 	}
 	a{text-decoration : none}
 	.whole {
 	    width:100%;
 	    height: 100%;
-	    bottom:0pX;
-	    position: absolute;
+	}
+	#app {
+		height:100%;
 	}
 	.el-header, .el-footer {
 	    background-color: rgba(0,0,0,0);
@@ -90,24 +91,18 @@
 	    text-align: center;
 	    line-height: 60px;
 	}
-	  
-	.el-aside {
-	    background-color: #D3DCE6;
-	    color: #333;
-	    text-align: center;
-	    line-height: 200px;
-	}
-
 	.el-main {
 	    color: #333;
-	    text-align: center;
-	    line-height: 160px;
 	}
 	  
 	body > .el-container {
 	    margin-bottom: 40px;
 	}
-	  
+	.el-container.is-vertical {
+	    width: 90%;
+	    margin-left: auto;
+	    margin-right: auto;
+	}
 	.el-container:nth-child(5) .el-aside,
 	.el-container:nth-child(6) .el-aside {
 	    line-height: 260px;
@@ -128,11 +123,13 @@
 		min-height: 40px;
 	}
 	#time1 {
-		position:absolute;
-		top:0px;
+		position:fixed;
+		top: 0px;
+		left: 90%;
 	}
 	#info1 {
-		position: absolute;
+		position: fixed;
 		top: 0px;
+		left: 87%;
 	}
 </style>

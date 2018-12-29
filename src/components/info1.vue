@@ -6,9 +6,9 @@
 			    <div>
 				    网络爬虫：郭凌锋
 				  	<br/>
-				  	后端：曹建真
-				  	<br/>
 				  	图像搜索：徐尚宁
+				  	<br/>
+				  	后端：曹建真
 				  	<br/>
 				  	前端：况羿
 				</div>
@@ -25,6 +25,6 @@
 </script>
 <style>
 	.el-icon-info{
-		color: #fff;
+		color: #ccc;
 	}
 </style>

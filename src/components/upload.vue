@@ -21,3 +21,17 @@
 		name:"Upload"
 	}
 </script>
+<style type="text/css">
+	.el-popover {
+		background: rgba(0,0,0,0);
+		border: 0px;
+		color: hsla(220, 3%, 85%, 1);
+	}
+	.el-upload-dragger {
+		background: rgba(100,100,100,0.7);
+		border: 0px;
+	}
+	.el-upload-dragger .el-upload__text {
+		color: hsla(220, 3%, 85%, 1);
+	}
+</style>

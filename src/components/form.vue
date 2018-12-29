@@ -16,9 +16,10 @@
 	            </el-col> -->
 	            <el-col :span="1">
 	              		<el-button 
-							:type="tp" 
-							@click="Submit" 
-							icon="el-icon-search">
+							:type="tp.typ" 
+							@click="Submit"
+							id="sbut">
+							<img :src="tp.imgurl">
 						</el-button>
 	            </el-col>
 	          </el-form-item>
@@ -35,7 +36,7 @@
 		},
 		props: {
 			tp: {
-				type: String,
+				type: Object,
 				required: true
 			}
 		},
@@ -48,17 +49,24 @@
 		},
 		methods: {
 			Submit() {
-				console.log("submit!");
+				console.log(this.$http.get(baseURL));
 			}
 		}
 	}
 </script>
 <style>
-	#up{
+	#up {
 		margin-right: 10px;
 		cursor: pointer;
 	}
 	.el-input__inner {
 		background-color: rgba(100,100,100,0.5);
+		color: #cdcdcd;
+	}
+	#sbut {
+		padding-top: 5px;
+		padding-right: 5px;
+		padding-left: 5px;
+		padding-bottom: 5px;
 	}
 </style>
