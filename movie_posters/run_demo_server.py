@@ -14,6 +14,8 @@ import functools
 import logging
 import collections
 
+from pytesseract import image_to_string
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -223,9 +225,32 @@ def main():
 
 def extract_rot(img, save_path):
     params = get_predictor(checkpoint_path)(img)
-    cv2.imwrite(os.path.join(save_path, rot_filename),
-                draw_illu(img.copy(), params))
-    return params
+    # cv2.imwrite(os.path.join(save_path, rot_filename),
+    #             draw_illu(img.copy(), params))
+    return params['text_lines']
+
+
+def recognize_text(img, box_coordinates, save_path):
+    f = open(os.path.join(save_path, recognized_text_filename), 'w')
+    for params in box_coordinates:
+        left_x = int(min(params['x0'], params['x3']))
+        right_x = int(max(params['x1'], params['x2']))
+        upper_y = int(min(params['y0'], params['y1']))
+        lower_y = int(max(params['y2'], params['y3']))
+
+        if left_x < 0:
+            left_x = 0
+        if right_x > img.shape[1]:
+            right_x = img.shape[1]
+        if upper_y < 0:
+            upper_y = 0
+        if lower_y > img.shape[0]:
+            lower_y = img.shape[0]
+        print('({}, {}), ({}, {})'.format(left_x, upper_y, right_x, lower_y))
+        text = image_to_string(img[upper_y:lower_y, left_x:right_x],
+                               config=tesseract_options)
+        f.write(text + '\n')
+    f.close()
 
 
 if __name__ == '__main__':
@@ -233,6 +258,8 @@ if __name__ == '__main__':
     dataset_path = 'dataset'
     result_path = 'results'
     rot_filename = 'rot.png'
+    recognized_text_filename = 'text.txt'
+    tesseract_options = '-l eng --oem 1 --psm 7'
 
     if not os.path.exists(result_path):
         os.mkdir(result_path)
@@ -244,6 +271,7 @@ if __name__ == '__main__':
         result_save_path = os.path.join(result_path, movie_title)
         if not os.path.exists(result_save_path):
             os.mkdir(result_save_path)
-        extract_rot(img, result_save_path)
+        p = extract_rot(img, result_save_path)
+        recognize_text(img, p, result_save_path)
 
     # main()
