@@ -225,30 +225,54 @@ def main():
 
 def extract_rot(img, save_path):
     params = get_predictor(checkpoint_path)(img)
-    # cv2.imwrite(os.path.join(save_path, rot_filename),
-    #             draw_illu(img.copy(), params))
-    return params['text_lines']
+    cv2.imwrite(os.path.join(save_path, rot_filename),
+                draw_illu(img.copy(), params))
+    coordinates = params['text_lines']
+    # handle coordinates that are out of the boundary of the image
+    for c in coordinates:
+        for i in range(4):
+            x_key = 'x' + str(i)
+            y_key = 'y' + str(i)
+            if c[x_key] < 0:
+                c[x_key] = 0
+            elif c[x_key] > img.shape[1]:
+                c[x_key] = img.shape[1]
+            if c[y_key] < 0:
+                c[y_key] = 0
+            elif c[y_key] > img.shape[0]:
+                c[y_key] = img.shape[0]
+    return coordinates
 
 
 def recognize_text(img, box_coordinates, save_path):
     f = open(os.path.join(save_path, recognized_text_filename), 'w')
     for params in box_coordinates:
-        left_x = int(min(params['x0'], params['x3']))
-        right_x = int(max(params['x1'], params['x2']))
-        upper_y = int(min(params['y0'], params['y1']))
-        lower_y = int(max(params['y2'], params['y3']))
+        # correct images with skew angles equal to or greater than 5 degrees
+        correction_threshold = 5
+        angle = np.rad2deg(np.arctan(
+            (params['y1'] - params['y0']) / (params['x1'] - params['x0'])))
+        if np.abs(angle) >= correction_threshold:
+            center = (params['x0'], params['y0'])
+            # rotate around the center (x0, y0)
+            M = cv2.getRotationMatrix2D(center, angle, 1)
+            # move center to the origin (x0, y0) -> (0, 0)
+            M[0][2] -= center[0]
+            M[1][2] -= center[1]
+            # calculate text width as distance between (x0, y0) and (x1, y1), text
+            # height as distance between (x0, y0) and (x3, y3)
+            text_width = int(np.ceil(np.sqrt(
+                (params['y1'] - params['y0']) ** 2 + (params['x1'] - params['x0']) ** 2)))
+            text_height = int(np.ceil(np.sqrt(
+                (params['y3'] - params['y0']) ** 2 + (params['x3'] - params['x0']) ** 2)))
+            rot = cv2.warpAffine(img, M, (text_width, text_height))
+        else:
+            left_x = int(min(params['x0'], params['x3']))
+            right_x = int(max(params['x1'], params['x2']))
+            upper_y = int(min(params['y0'], params['y1']))
+            lower_y = int(max(params['y2'], params['y3']))
+            rot = img[upper_y:lower_y, left_x:right_x]
 
-        if left_x < 0:
-            left_x = 0
-        if right_x > img.shape[1]:
-            right_x = img.shape[1]
-        if upper_y < 0:
-            upper_y = 0
-        if lower_y > img.shape[0]:
-            lower_y = img.shape[0]
-        print('({}, {}), ({}, {})'.format(left_x, upper_y, right_x, lower_y))
-        text = image_to_string(img[upper_y:lower_y, left_x:right_x],
-                               config=tesseract_options)
+        text = image_to_string(rot, config=tesseract_options)
         f.write(text + '\n')
     f.close()
 
