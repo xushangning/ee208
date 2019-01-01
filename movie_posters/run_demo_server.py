@@ -241,30 +241,44 @@ def extract_rot(img, save_path):
                 c[y_key] = 0
             elif c[y_key] > img.shape[0]:
                 c[y_key] = img.shape[0]
-    return coordinates
+        c['angle'] = np.rad2deg(np.arctan(
+            (c['y1'] - c['y0']) / (c['x1'] - c['x0'])))
+        if abs(c['angle']) >= correction_threshold:
+            c['text height'] = int(np.ceil(np.sqrt(
+                (c['y3'] - c['y0']) ** 2 + (c['x3'] - c['x0']) ** 2)))
+        else:
+            upper_y = int(min(c['y0'], c['y1']))
+            lower_y = int(max(c['y2'], c['y3']))
+            c['text height'] = lower_y - upper_y
+    coordinates.sort(key=lambda c: c['text height'], reverse=True)
+
+    # only return 5 boxes with greatest height
+    return coordinates[:5]
 
 
 def recognize_text(img, box_coordinates, save_path):
+    if len(box_coordinates) == 0:
+        return
+
     f = open(os.path.join(save_path, recognized_text_filename), 'w')
+    max_text_height = box_coordinates[0]['text height']
     for params in box_coordinates:
-        # correct images with skew angles equal to or greater than 5 degrees
-        correction_threshold = 5
-        angle = np.rad2deg(np.arctan(
-            (params['y1'] - params['y0']) / (params['x1'] - params['x0'])))
-        if np.abs(angle) >= correction_threshold:
+        # only recognize the text if its height is within 70% of the greatest
+        # text height
+        if params['text height'] < max_text_height * 0.7:
+            break
+        if np.abs(params['angle']) >= correction_threshold:
             center = (params['x0'], params['y0'])
             # rotate around the center (x0, y0)
-            M = cv2.getRotationMatrix2D(center, angle, 1)
+            M = cv2.getRotationMatrix2D(center, params['angle'], 1)
             # move center to the origin (x0, y0) -> (0, 0)
             M[0][2] -= center[0]
             M[1][2] -= center[1]
-            # calculate text width as distance between (x0, y0) and (x1, y1), text
-            # height as distance between (x0, y0) and (x3, y3)
+            # calculate text width as distance between (x0, y0) and (x1, y1),
+            # text height as distance between (x0, y0) and (x3, y3)
             text_width = int(np.ceil(np.sqrt(
                 (params['y1'] - params['y0']) ** 2 + (params['x1'] - params['x0']) ** 2)))
-            text_height = int(np.ceil(np.sqrt(
-                (params['y3'] - params['y0']) ** 2 + (params['x3'] - params['x0']) ** 2)))
-            rot = cv2.warpAffine(img, M, (text_width, text_height))
+            rot = cv2.warpAffine(img, M, (text_width, params['text height']))
         else:
             left_x = int(min(params['x0'], params['x3']))
             right_x = int(max(params['x1'], params['x2']))
@@ -282,7 +296,9 @@ if __name__ == '__main__':
     dataset_path = 'dataset'
     result_path = 'results'
     rot_filename = 'rot.png'
-    recognized_text_filename = 'text.txt'
+    recognized_text_filename = 'suppressed_text.txt'
+    # correct images with skew angles equal to or greater than 5 degrees
+    correction_threshold = 5
     tesseract_options = '-l eng --oem 1 --psm 7'
 
     if not os.path.exists(result_path):
