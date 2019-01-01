@@ -260,9 +260,12 @@ def recognize_text(img, box_coordinates, save_path):
     if len(box_coordinates) == 0:
         return
 
+    rot_path = os.path.join(save_path, 'rot')
+    if not os.path.exists(rot_path):
+        os.mkdir(rot_path)
     f = open(os.path.join(save_path, recognized_text_filename), 'w')
     max_text_height = box_coordinates[0]['text height']
-    for params in box_coordinates:
+    for i, params in enumerate(box_coordinates):
         # only recognize the text if its height is within 70% of the greatest
         # text height
         if params['text height'] < max_text_height * 0.7:
@@ -286,6 +289,7 @@ def recognize_text(img, box_coordinates, save_path):
             lower_y = int(max(params['y2'], params['y3']))
             rot = img[upper_y:lower_y, left_x:right_x]
 
+        cv2.imwrite(os.path.join(rot_path, str(i) + '.png'), rot)
         text = image_to_string(rot, config=tesseract_options)
         f.write(text + '\n')
     f.close()
