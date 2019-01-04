@@ -59,9 +59,12 @@
 	}
 	.el-card {
 		border: 0px;
-		background-color: rgba(50,50,50,0.4);
-		color:#9b9b9b;
+		background-color: rgba(37,37,37,0.7);
+		color:#bbbbbb;
 		margin-bottom: 10px;
+	}
+	.el-tag--info {
+		color:#e7e7e7;
 	}
 	.el-card__body {
 		width: 90%;

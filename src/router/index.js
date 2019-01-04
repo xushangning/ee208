@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Home from '@/components/home'
 import Results from '@/components/results'
+import Result from '@/components/result'
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ export default new Router({
     	name: 'Results',
     	path: '/results',
     	component: Results
+    },
+    {
+    	name: 'Result',
+    	path: '/result',
+    	component: Result
     },
   ]
 })

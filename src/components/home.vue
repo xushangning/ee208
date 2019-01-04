@@ -47,7 +47,6 @@
 				index: "/",
 				items: [
 					{id: 1,index: "/",name: "首页"},
-					{id: 2,index: "/hello",name: "电影大全"}
 				],
 				movies: [
 					{id: 1,name:"蜘蛛侠3",img:"../../static/image/蜘蛛侠3.jpg"},
@@ -123,12 +122,12 @@
 		min-height: 40px;
 	}
 	#time1 {
-		position:fixed;
+		position:absolute;
 		top: 0px;
 		left: 90%;
 	}
 	#info1 {
-		position: fixed;
+		position: absolute;
 		top: 0px;
 		left: 87%;
 	}

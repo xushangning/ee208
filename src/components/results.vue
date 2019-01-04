@@ -28,7 +28,7 @@
 	import VForm from './form.vue'; 
 	import Carousel from './carousel.vue';
 	import Info1 from './info1.vue';
-	import MovieCard from './moviecard';
+	import MovieCard from './moviecard.vue';
 	export default {
 		components:{
 			'vmenu': VMenu,
@@ -43,8 +43,7 @@
 				index: '/results',
 				items: [
 					{id: 1,index: '/',name: '首页'},
-					{id: 2,index: '/hello',name: '电影大全'},
-					{id: 3,index: '/results',name: '搜索结果'}
+					{id: 2,index: '/results',name: '搜索结果'}
 				],
 				bg: {
 					width: '100%',
@@ -78,14 +77,14 @@
 	}
 	::-webkit-scrollbar-button { /* 滚动条两端的按钮 */
 	    width:10px;
-	    background-color: #000000;
+	    background-color: #202020;
 	}
 	::-webkit-scrollbar:horizontal {
 	    height:10px;
 	    margin-bottom:2px
 	}
 	::-webkit-scrollbar-track {  /* 外层轨道 */
-	    background-color: #000
+	    background-color: #202020;
 	}
 	::-webkit-scrollbar-track-piece {  /*内层轨道，滚动条中间部分 */
 	    background-color: #202020;
@@ -121,6 +120,7 @@
 	}
 	.el-header, .el-footer {
 	    background-color: rgba(0,0,0,0);
+	    line-height: 60px;
 	    color: #333;
 	}
 	  

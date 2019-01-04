@@ -1,10 +1,12 @@
 <template>
 	<div>
-	    <el-carousel type="card" trigger="click" height="400px">
+	    <el-carousel type="card" trigger="click" height="400px" interval="100000000">
 	      <el-carousel-item
 	      v-for="movie in movies" 
 	      :key="movie.id">
-	        <img :src="movie.img">
+	      <el-col :offset="6">
+	      	<img :src="movie.img">
+	      </el-col>
 	      </el-carousel-item>
 	    </el-carousel>
 	</div>
@@ -23,21 +25,17 @@
 </script>
 
 <style>
-	.el-carousel__item h3 {
-	    color: rgba(0,0,0,0);
-	    font-size: 14px;
-	    opacity: 0;
-	    line-height: 150px;
-	    margin: 0;
+	.el-carousel__item:nth-child(2n) {
+		color: rgba(0,0,0,0);
 	}
-  .el-carousel__item:nth-child(2n) {
-    color: rgba(0,0,0,0);
-  }
-  
-  .el-carousel__item:nth-child(2n+1) {
-    color: rgba(0,0,0,0);
-  }
-  .el-carousel__mask {
-  	background-color: rgba(0,0,0,0);
-  }
+	.el-carousel__item:nth-child(2n+1) {
+		color: rgba(0,0,0,0);
+	}
+	.el-carousel__mask {
+  		background-color: rgba(0,0,0,0);
+	}
+	.image {
+		padding-left: auto;
+		padding-right: auto;
+	}
 </style>
