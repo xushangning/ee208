@@ -19,6 +19,11 @@ from pytesseract import image_to_string
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+checkpoint_path = 'east_icdar2015_resnet_v1_50_rbox'
+# correct images with skew angles equal to or greater than 5 degrees
+correction_threshold = 5
+tesseract_options = '-l eng --oem 1 --psm 7'
+
 
 @functools.lru_cache(maxsize=1)
 def get_host_info():
@@ -223,10 +228,11 @@ def main():
     app.run('0.0.0.0', args.port)
 
 
-def extract_rot(img, save_path):
+def extract_rot(img, save_path=''):
     params = get_predictor(checkpoint_path)(img)
-    cv2.imwrite(os.path.join(save_path, rot_filename),
-                draw_illu(img.copy(), params))
+    if len(save_path):
+        cv2.imwrite(os.path.join(save_path, rot_filename),
+                    draw_illu(img.copy(), params))
     coordinates = params['text_lines']
     # handle coordinates that are out of the boundary of the image
     for c in coordinates:
@@ -295,15 +301,52 @@ def recognize_text(img, box_coordinates, save_path):
     f.close()
 
 
+def recognize_text_from_posters(img):
+    """
+    从海报中识别文字
+    :param img: numpy.ndarray 海报图片
+    :return str 识别到的文字
+    """
+    # 在图片中寻找文字区域。一个矩形的文字区域由其四个顶点表示。
+    box_coordinates = extract_rot(img)
+    if len(box_coordinates) == 0:
+        return ''
+
+    max_text_height = box_coordinates[0]['text height']
+    text = ''
+    for i, params in enumerate(box_coordinates):
+        # 只识别文字高度在最大文字高度 70% 以内的文字区域
+        if params['text height'] < max_text_height * 0.7:
+            break
+        # 如果文字区域的倾角超过了可容忍的范围
+        if np.abs(params['angle']) >= correction_threshold:
+            center = (params['x0'], params['y0'])
+            # 以 (x0, y0)，即左上角顶点为中心旋转图片
+            M = cv2.getRotationMatrix2D(center, params['angle'], 1)
+            # 将左上角顶点平移至原点 (x0, y0) -> (0, 0)
+            M[0][2] -= center[0]
+            M[1][2] -= center[1]
+            # 计算文字宽度。认为 (x0, y0) 和 (x1, y1) 之间的距离为文字宽度。
+            text_width = int(np.ceil(np.sqrt(
+                (params['y1'] - params['y0']) ** 2 + (params['x1'] - params['x0']) ** 2)))
+            rot = cv2.warpAffine(img, M, (text_width, params['text height']))
+        else:   # 倾角可以容忍，不旋转文字
+            left_x = int(min(params['x0'], params['x3']))
+            right_x = int(max(params['x1'], params['x2']))
+            upper_y = int(min(params['y0'], params['y1']))
+            lower_y = int(max(params['y2'], params['y3']))
+            rot = img[upper_y:lower_y, left_x:right_x]
+
+        text += image_to_string(rot, config=tesseract_options) + '\n'
+
+    return text
+
+
 if __name__ == '__main__':
-    checkpoint_path = './east_icdar2015_resnet_v1_50_rbox'
     dataset_path = 'dataset'
     result_path = 'results'
     rot_filename = 'rot.png'
     recognized_text_filename = 'suppressed_text.txt'
-    # correct images with skew angles equal to or greater than 5 degrees
-    correction_threshold = 5
-    tesseract_options = '-l eng --oem 1 --psm 7'
 
     if not os.path.exists(result_path):
         os.mkdir(result_path)
