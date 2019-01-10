@@ -49,11 +49,11 @@
 					{id: 1,index: "/",name: "首页"},
 				],
 				movies: [
-					{id: 1,name:"蜘蛛侠3",img:"../../static/image/蜘蛛侠3.jpg"},
-					{id: 2,name:"钢铁侠3",img:"../../static/image/钢铁侠3.jpg"},
-					{id: 3,name:"X战警3：背水一战",img:"../../static/image/X战警3：背水一战.jpg"},
-					{id: 4,name:"海王",img:"../../static/image/海王.jpg"},
-					{id: 5,name:"蝙蝠侠大战超人：正义黎明",img:"../../static/image/蝙蝠侠大战超人：正义黎明.jpg"},
+					{id: 1,name:"海王",img:"../../static/image/海王.jpg"},
+					{id: 2,name:"无名之辈",img:"../../static/image/无名之辈.jpg"},
+					{id: 3,name:"无双",img:"../../static/image/无双.jpg"},
+					{id: 4,name:"毒液：致命守护者",img:"../../static/image/毒液：致命守护者.jpg"},
+					{id: 5,name:"一出好戏",img:"../../static/image/一出好戏.jpg"},
 				],
 				bg: {
 					width: '100%',

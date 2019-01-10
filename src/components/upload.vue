@@ -7,7 +7,8 @@
 				class="upload-demo"
 				drag
 				action="#"
-				:auto-upload="false">
+				:auto-upload="false"
+				:on-change="change">
 				<i class="el-icon-upload"></i>
 				<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
 			</el-upload>
@@ -18,7 +19,12 @@
 
 <script>
 	export default {
-		name:"Upload"
+		name:"Upload",
+		methods: {
+			change(file) {
+				window.location.href="/result?"+file.name.split('.')[0]
+			}
+		}
 	}
 </script>
 <style type="text/css">

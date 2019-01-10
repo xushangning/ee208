@@ -1,11 +1,13 @@
 <template>
 	<div>
-	    <el-carousel type="card" trigger="click" height="400px" interval="100000000">
+	    <el-carousel type="card" trigger="click" height="400px">
 	      <el-carousel-item
 	      v-for="movie in movies" 
 	      :key="movie.id">
 	      <el-col :offset="6">
-	      	<img :src="movie.img">
+	      	<a :href="'result?'+movie.name">
+	      		<img :src="movie.img">
+	      	</a>
 	      </el-col>
 	      </el-carousel-item>
 	    </el-carousel>

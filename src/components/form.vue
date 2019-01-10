@@ -49,7 +49,7 @@
 		},
 		methods: {
 			Submit() {
-				console.log(this.$http.get(baseURL));
+				window.location.href='results?'+this.form.name
 			}
 		}
 	}
