@@ -1,0 +1,4 @@
+tensorflow
+Shapely
+opencv-python
+pytesseract
