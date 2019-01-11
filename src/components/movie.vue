@@ -90,7 +90,7 @@
 		},
 		data() {
 			return {
-				show:true
+				show:false
 			}
 		},
 		computed: {
