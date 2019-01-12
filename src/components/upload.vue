@@ -12,6 +12,12 @@
 				<i class="el-icon-upload"></i>
 				<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
 			</el-upload>
+			<el-switch
+				v-model="choice"
+				active-color="#dcdfe6"
+				active-text="海报"
+				inactive-text="宣传片截图">
+			</el-switch>
 		  	<i slot="reference" class="el-icon-picture"></i>
 		</el-popover>
 	</div>
@@ -21,10 +27,23 @@
 	import axios from 'axios';
 	export default {
 		name:"Upload",
+		data (){
+			return{
+				choice:true
+			} 
+		},
 		methods: {
 			change(file) {
 				console.log(file)
-				const path = 'http://localhost:5000/result';
+				if(this.choice)
+				{
+
+					const path = 'http://localhost:5000/result1';
+				}
+				else
+				{
+					const path = 'http://localhost:5000/result2';
+				}
 				let data = new FormData();
 				data.append('file',file)
 				let config = {

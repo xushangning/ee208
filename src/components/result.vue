@@ -40,7 +40,7 @@
 		data() {
 			var url = decodeURI(location.search);
 			var req = url.split('=')[1];
-			const path = 'http://localhost:5000/result?name=' + req;
+			const path = 'http://localhost:5000/result0?name=' + req;
 			var data;
 		    this.$http.get(path)
 		        .then((res) => {

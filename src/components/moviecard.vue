@@ -1,6 +1,6 @@
 <template>
 	<div class="card">
-		<a :href="'result?name='+movie.name">
+		<a :href="'result0?name='+movie.name">
 			<el-card :body-style="{padding: '0px'}">
 				<img :src="'../../static/image/' + movie.name + '.jpg'" class="image">
 				<div class="right">

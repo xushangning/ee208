@@ -5,7 +5,7 @@
 	      v-for="movie in movies" 
 	      :key="movie.id">
 	      <el-col :offset="6">
-	      	<a :href="'result?'+movie.name">
+	      	<a :href="'result0?name='+movie.name">
 	      		<img :src="movie.img">
 	      	</a>
 	      </el-col>
