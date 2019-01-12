@@ -63,7 +63,7 @@ app = Flask(__name__)
 def text_Search():
     search = request.args.get('name')
     dsl1 = {'query':{'match':{'name':str(search)}}}
-    result = es.search(index='homework1',doc_type='Movie',body=dsl)
+    result = es.search(index='homework1',doc_type='Movie',body=dsl1)
     results = []
     for i in result['hits']['hits']:
         results.append(i['_source'])
