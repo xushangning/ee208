@@ -18,11 +18,27 @@
 </template>
 
 <script>
+	import axios from 'axios';
 	export default {
 		name:"Upload",
 		methods: {
 			change(file) {
-				window.location.href="/result?"+file.name.split('.')[0]
+				console.log(file)
+				const path = 'http://localhost:5000/result';
+				let data = new FormData();
+				data.append('file',file)
+				let config = {
+            		headers:{'Content-Type':'multipart/form-data'}
+          		};
+				axios.post(path,data,config)
+					.then((res) => {
+		        	 data= res.data.name;
+		        	 window.location.href='result?name='+ data;
+		        	})
+		        .catch((error) => {
+		          // eslint-disable-next-line
+		        	console.error(error);
+		     		});
 			}
 		}
 	}

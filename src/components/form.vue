@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-form ref="form" :model="form">        
+		<el-form ref="form" :model="form" @submit.navite="newsubmit">        
 	        <el-form-item>
 	            <el-col :span="23">
 	            	<el-input
@@ -17,7 +17,7 @@
 	            <el-col :span="1">
 	              		<el-button 
 							:type="tp.typ" 
-							@click="Submit"
+							native-type="submit"
 							id="sbut">
 							<img :src="tp.imgurl">
 						</el-button>
@@ -49,7 +49,7 @@
 		},
 		methods: {
 			Submit() {
-				window.location.href='results?'+this.form.name
+				window.location.href='results?name='+this.form.name
 			}
 		}
 	}

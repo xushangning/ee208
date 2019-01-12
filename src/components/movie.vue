@@ -2,7 +2,7 @@
 	<div class="card">
 		<el-card :body-style="{padding: '0px'}">
 			<el-row>
-				<img :src="movie.imgurl" class="image">
+				<img :src="'../../static/image/' + movie.name + '.jpg'" class="image">
 				<div class="right">
 					<h3>{{movie.name}}</h3>
 					<el-row style="margin-bottom: 20px">
