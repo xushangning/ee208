@@ -105,10 +105,8 @@
 			},
 			changetime() {
 				var myvid = document.getElementById('video1');
-	    		if (this.movie.name==='疯狂动物城')
-	    		{
-	    			myvid.currentTime=40;
-	    		}
+	    		
+	    		myvid.currentTime=this.movie.start_time;
 			}
 		}
 	}

@@ -43,18 +43,22 @@
 			"info1": Info1,
 		},
 		data() {
+				const path = 'http://localhost:5000/';
+				var data;
+		    	this.$http.get(path)
+		        .then((res) => {
+		        	 data= res.data;
+		        })
+		        .catch((error) => {
+		          // eslint-disable-next-line
+		        	console.error(error);
+		     	});
 			return {
 				index: "/",
 				items: [
 					{id: 1,index: "/",name: "首页"},
 				],
-				movies: [
-					{id: 1,name:"海王",img:"../../static/image/海王.jpg"},
-					{id: 2,name:"无名之辈",img:"../../static/image/无名之辈.jpg"},
-					{id: 3,name:"无双",img:"../../static/image/无双.jpg"},
-					{id: 4,name:"毒液：致命守护者",img:"../../static/image/毒液：致命守护者.jpg"},
-					{id: 5,name:"一出好戏",img:"../../static/image/一出好戏.jpg"},
-				],
+				movies: data,
 				bg: {
 					width: '100%',
     				height: '100%',
