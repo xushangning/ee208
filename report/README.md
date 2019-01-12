@@ -21,7 +21,7 @@
 \end{document}
 ```
 
-3. 一个 Tex 文件中写一个到多个 section，section 的标题和内容都可以是中文。由于 LaTeX 已经配置好了，不需要再自行 `\usepackage`。；
+3. 一个 Tex 文件中写一个到多个 section，section 的标题和内容都可以是中文。由于 LaTeX 已经配置好了，不需要再自行 `\usepackage`；
 4. 由于 `crawler.tex` 是不完整的 Tex 文件，此时直接编译 `crawler.tex` **一定**会报错。为了看到编译 `crawler.tex` 得到的报告，我们先要在 `main.tex` 中引用 `crawler.tex`，类似在 C++ 中引用头文件。`\subfile{}` 这个命令类似 C++ 中的 `#include`，可以引用其他 Tex 文件。现在我们要在 `main.tex` 引用 `crawler.tex` 的文件，在 `main.tex` 中找到如下几行：
 
 ```latex
