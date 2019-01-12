@@ -27,17 +27,97 @@ tesseract_options = '-l eng --oem 1 --psm 7'
 
 @functools.lru_cache(maxsize=1)
 def get_host_info():
-    ret = {}
-    with open('/proc/cpuinfo') as f:
-        ret['cpuinfo'] = f.read()
-
-    with open('/proc/meminfo') as f:
-        ret['meminfo'] = f.read()
-
-    with open('/proc/loadavg') as f:
-        ret['loadavg'] = f.read()
-
-    return ret
+    # 原本为从 /proc 中读取系统信息，但 /proc 为 Linux 独有，所以将系统信息写死
+    # 以解决系统兼容性问题。
+    return {
+        'cpuinfo': '''processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 158
+model name	: Intel(R) Pentium(R) CPU G4560 @ 3.50GHz
+stepping	: 9
+microcode	: 0x8e
+cpu MHz		: 2257.124
+cache size	: 3072 KB
+physical id	: 0
+siblings	: 4
+core id		: 0
+cpu cores	: 2
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov \
+pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb \
+rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology \
+nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor \
+ds_cpl vmx est tm2 ssse3 sdbg cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe \
+popcnt tsc_deadline_timer aes xsave rdrand lahf_lm abm 3dnowprefetch cpuid_\
+fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority \
+ept vpid ept_ad fsgsbase tsc_adjust smep erms invpcid mpx rdseed smap \
+clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm arat pln pts hwp \
+hwp_notify hwp_act_window hwp_epp flush_l1d
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf
+bogomips	: 7010.00
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+''',
+        'meminfo': '''MemTotal:        7925036 kB
+MemFree:          223120 kB
+MemAvailable:    4643672 kB
+Buffers:          114532 kB
+Cached:          4848936 kB
+SwapCached:        40728 kB
+Active:          3934840 kB
+Inactive:        3383696 kB
+Active(anon):    2060612 kB
+Inactive(anon):   695680 kB
+Active(file):    1874228 kB
+Inactive(file):  2688016 kB
+Unevictable:          96 kB
+Mlocked:              96 kB
+SwapTotal:      10485756 kB
+SwapFree:       10099068 kB
+Dirty:               132 kB
+Writeback:             0 kB
+AnonPages:       2348700 kB
+Mapped:           871428 kB
+Shmem:            401224 kB
+KReclaimable:     169404 kB
+Slab:             237016 kB
+SReclaimable:     169404 kB
+SUnreclaim:        67612 kB
+KernelStack:       12032 kB
+PageTables:        33632 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    14448272 kB
+Committed_AS:    7274528 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:           0 kB
+VmallocChunk:          0 kB
+Percpu:             1344 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+DirectMap4k:      601760 kB
+DirectMap2M:     7542784 kB
+DirectMap1G:     1048576 kB
+''',
+        'loadavg': '0.81 1.46 1.70 1/765 17958\n'
+    }
 
 
 @functools.lru_cache(maxsize=100)
