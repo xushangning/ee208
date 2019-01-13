@@ -2,4 +2,5 @@
 *.log
 *.aux
 *.synctex.gz
-_minted-*
+*.bbl
+*.blg
