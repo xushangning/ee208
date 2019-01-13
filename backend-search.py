@@ -54,7 +54,8 @@ from flask import request
 from werkzeug.utils import secure_filename
 import cv2
 import numpy as np
-from run_demo_server import recognize_text_from_posters
+from posters.run_demo_server import recognize_text_from_posters
+from trailers.myapp import recognize_subtitle_from_frames
 
 app = Flask(__name__)
 
@@ -103,7 +104,7 @@ def result1():
     search.save('/result2/upload' + secure_filename(search.filename))
     img = cv2.imread('/result2/upload' + secure_filename(search.filename))
     img1 = np.array(img)
-    search = recognize_text_from_posters(img1)
+    search = recognize_subtitle_from_frames(img1)
     dsl4 = {'query':{'match':{'time':str(search)}}}
     result = es.search(index='homework1',doc_type='Movie',body=dsl4)
     res = result['hits']['hits'][0]['_source']
