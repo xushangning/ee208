@@ -7,8 +7,6 @@ import time
 import datetime
 import cv2
 import numpy as np
-import uuid
-import json
 
 import functools
 import logging
@@ -228,25 +226,6 @@ def get_predictor(checkpoint_path):
     return predictor
 
 
-### the webserver
-from flask import Flask, request, render_template
-import argparse
-
-
-class Config:
-    SAVE_DIR = 'static/results'
-
-
-config = Config()
-
-
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return render_template('index.html', session_id='dummy_session_id')
-
-
 def draw_illu(illu, rst):
     for t in rst['text_lines']:
         d = np.array([t['x0'], t['y0'], t['x1'], t['y1'], t['x2'],
@@ -254,58 +233,6 @@ def draw_illu(illu, rst):
         d = d.reshape(-1, 2)
         cv2.polylines(illu, [d], isClosed=True, color=(255, 255, 0))
     return illu
-
-
-def save_result(img, rst):
-    session_id = str(uuid.uuid1())
-    dirpath = os.path.join(config.SAVE_DIR, session_id)
-    os.makedirs(dirpath)
-
-    # save input image
-    output_path = os.path.join(dirpath, 'input.png')
-    cv2.imwrite(output_path, img)
-
-    # save illustration
-    output_path = os.path.join(dirpath, 'output.png')
-    cv2.imwrite(output_path, draw_illu(img.copy(), rst))
-
-    # save json data
-    output_path = os.path.join(dirpath, 'result.json')
-    with open(output_path, 'w') as f:
-        json.dump(rst, f)
-
-    rst['session_id'] = session_id
-    return rst
-
-
-@app.route('/', methods=['POST'])
-def index_post():
-    global predictor
-    import io
-    bio = io.BytesIO()
-    request.files['image'].save(bio)
-    img = cv2.imdecode(np.frombuffer(bio.getvalue(), dtype='uint8'), 1)
-    rst = get_predictor(checkpoint_path)(img)
-
-    save_result(img, rst)
-    return render_template('index.html', session_id=rst['session_id'])
-
-
-def main():
-    global checkpoint_path
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--port', default=8769, type=int)
-    parser.add_argument('--checkpoint_path', default=checkpoint_path)
-    parser.add_argument('--debug', action='store_true')
-    args = parser.parse_args()
-    checkpoint_path = args.checkpoint_path
-
-    if not os.path.exists(args.checkpoint_path):
-        raise RuntimeError(
-            'Checkpoint `{}` not found'.format(args.checkpoint_path))
-
-    app.debug = args.debug
-    app.run('0.0.0.0', args.port)
 
 
 def extract_rot(img, save_path=''):
@@ -440,5 +367,3 @@ if __name__ == '__main__':
             os.mkdir(result_save_path)
         p = extract_rot(img, result_save_path)
         recognize_text(img, p, result_save_path)
-
-    # main()
